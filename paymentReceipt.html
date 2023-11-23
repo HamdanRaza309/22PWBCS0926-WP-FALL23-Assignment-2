@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Receipt</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        h1 {
+            text-align: center;
+            color: #cfc7c7;
+            padding: 10px;
+            margin: 50px 0px 20px 0px;
+            font-size: 3.5rem;
+            background-color: black;
+        }
+
+        .table thead {
+            color: rgb(255, 34, 34);
+            font-weight: bolder;
+            font-family: monospace;
+        }
+
+        .btn {
+            border: 2px solid red;
+            padding: 5px;
+            margin: 3px;
+            background: #ff6aa1;
+            transition: all .2s ease-in-out;
+            color: #000;
+            width: 100px;
+        }
+
+        .btn:hover {
+            cursor: pointer;
+            background: transparent;
+            color: #000;
+            border: 2px solid red;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#" style="cursor:default;">Library</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item ">
+                    <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                        aria-expanded="false">
+                        Book Categories
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="fiction.html">Fiction</a>
+                        <a class="dropdown-item" href="horror.html">Horror</a>
+                        <a class="dropdown-item" href="classic.html">Classic</a>
+                        <a class="dropdown-item" href="fantasy.html">Fantasy</a>
+                        <a class="dropdown-item" href="dystopian.html">Dystopian</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="paymentReceipt.html">Payment Receipt</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="cart.html">Cart</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="contact.html">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h1>Payment Receipt</h1>
+
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                </tr>
+            </thead>
+            <tbody id="receipt-items"></tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2"><strong>Total:</strong></td>
+                    <td id="total-amount">$0.00</td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <p class="mt-4">
+            <a href="index.html" class="btn btn-primary">Back Home</a>
+        </p>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+        // Function to retrieve cart data from local storage
+        function getCartData() {
+            const cartData = localStorage.getItem('cart');
+            return cartData ? JSON.parse(cartData) : [];
+        }
+
+        // Function to generate the payment receipt
+        function generateReceipt() {
+            const receiptContainer = document.getElementById('receipt-items');
+            const totalAmountElement = document.getElementById('total-amount');
+            let totalAmount = 0;
+
+            // Get cart data from local storage
+            const cartItems = getCartData();
+
+            // Clear existing items in the receipt
+            receiptContainer.innerHTML = '';
+
+            // Iterate through each item in the cart
+            cartItems.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.title}</td>
+                    <td>$${item.price.toFixed(2)}</td>
+                    <td>${item.quantity}</td>
+                `;
+                receiptContainer.appendChild(row);
+
+                // Update the total amount
+                totalAmount += item.price * item.quantity;
+            });
+
+            // Update the total amount display
+            totalAmountElement.textContent = `$${totalAmount.toFixed(2)}`;
+        }
+
+        // Initial generation of the receipt
+        generateReceipt();
+    </script>
+
+</body>
+
+</html>
